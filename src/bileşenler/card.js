@@ -1,4 +1,35 @@
+import axios from "axios";
 const Card = (makale) => {
+  const cardOlusturma = document.createElement("div");
+  cardOlusturma.classList.add("card");
+
+  const title = document.createElement("div");
+  title.classList.add("headline");
+  cardOlusturma.appendChild(title);
+  title.textContent = makale.anabaslik;
+
+  const div = document.createElement("div");
+  div.classList.add("author");
+  cardOlusturma.appendChild(div);
+
+  const divImg = document.createElement("div");
+  divImg.classList.add("img-container");
+  div.appendChild(divImg);
+
+  const img = document.createElement("img");
+  divImg.appendChild(img);
+  img.src = makale.yazarFoto;
+
+  const span = document.createElement("span");
+  div.appendChild(span);
+  span.textContent = `${makale.yazarAdi} tarafından`;
+
+  cardOlusturma.addEventListener("click", () => {
+    console.log(makale.anabaslik);
+  });
+
+  return cardOlusturma;
+
   // GÖREV 5
   // ---------------------
   // Aşağıda gördüğünüz işaretlemeyi döndürmesi gereken bu fonksiyonu uygulayın.
@@ -17,9 +48,18 @@ const Card = (makale) => {
   //   </div>
   // </div>
   //
-}
+};
 
 const cardEkleyici = (secici) => {
+  const Cardo = document.querySelector(secici);
+  axios.get("http://localhost:5001/api/makaleler").then((response) => {
+    const zincir = response.data.makaleler;
+    for (let key in zincir) {
+      for (let i = 0; i < zincir[key].length; i++) {
+        Cardo.appendChild(Card(zincir[key][i]));
+      }
+    }
+  });
   // GÖREV 6
   // ---------------------
   // Tek bağımsız değişkeni olarak bir css seçici alan bu fonksiyonu uygulayın.
@@ -28,6 +68,6 @@ const cardEkleyici = (secici) => {
   // Card bileşenini kullanarak yanıttaki her makale nesnesinden bir kart oluşturun.
   // Her cardı, fonksiyona iletilen seçiciyle eşleşen DOM'daki öğeye ekleyin.
   //
-}
+};
 
-export { Card, cardEkleyici }
+export { Card, cardEkleyici };
